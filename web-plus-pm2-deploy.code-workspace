@@ -1,0 +1,17 @@
+{
+  "folders": [
+		{
+			"name": "web-plus-pm2-deploy",
+			"path": "."
+		},
+		{
+			"name": "frontend",
+			"path": "frontend"
+		},
+		{
+			"name": "backend",
+			"path": "backend"
+		}
+	],
+  "settings": {}
+}
