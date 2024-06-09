@@ -3,5 +3,5 @@
 #Публикация проекта:
 
 IP адрес 158.160.156.202
-Frontend https://api.web-plus-pm2-deploy.nomorepartiesco.ru
+Frontend https://web-plus-pm2-deploy.nomorepartiesco.ru
 Backend https://api.web-plus-pm2-deploy.nomorepartiesco.ru
