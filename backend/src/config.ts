@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
 const secretKey = crypto.randomBytes(32).toString('hex');
+export const { DB_ADDRESS = 'mongodb://localhost:27017/mestodb' } = process.env;
 export const JWT_SECRET = process.env.TOKEN_ENV as string || secretKey;
 
 export const defaultUser = {

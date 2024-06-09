@@ -1,48 +1,32 @@
+import 'dotenv/config';
+
 import express from 'express';
-import { errors } from 'celebrate';
 import mongoose from 'mongoose';
-import userRouter from './routes/user';
-import cardRouter from './routes/card';
-import router from './routes/index';
-import { errorLogger, requestLogger } from './middlewares/logger';
-import { createUserValidation, loginValidation } from './validators/userValidator';
-import { createUser, loginUser } from './controllers/user';
-import {authMiddleware } from './middlewares/auth';
+import cookieParser from 'cookie-parser';
+import { errors } from 'celebrate';
+import cors from 'cors';
 import errorHandler from './middlewares/errorHandler';
+import { DB_ADDRESS } from './config';
+import routes from './routes';
 
-const helmet = require('helmet');
-
-const { PORT = 3000, MESTO_DB = 'mongodb://localhost:27017/mestodb' } = process.env;
+const { PORT = 3001 } = process.env;
 const app = express();
-app.use(helmet());
+mongoose.connect(DB_ADDRESS);
 
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use(requestLogger);
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
-app.post('/signup', createUserValidation, createUser);
-app.post('/signin', loginValidation, loginUser);
-
-app.use(authMiddleware);
-
-app.use(userRouter);
-app.use(cardRouter);
-app.use(router);
-
-app.use(errorLogger);
+app.use(routes);
 app.use(errors());
 app.use(errorHandler);
 
-async function startServer() {
-  try {
-    mongoose.set('strictQuery', true);
-    await mongoose.connect(MESTO_DB);
-    console.log('Database Mesto is connected');
-    await app.listen(PORT);
-    console.log(`Server started on port: ${PORT}`);
-  } catch (err) {
-    console.log('Server Error:', err);
-  }
-}
-
-startServer();
+// eslint-disable-next-line no-console
+app.listen(PORT, () => console.log('ok'));
