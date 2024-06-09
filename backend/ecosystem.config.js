@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-unresolved
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './.env.deploy' });
