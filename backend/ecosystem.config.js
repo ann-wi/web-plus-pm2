@@ -1,12 +1,16 @@
+// eslint-disable-next-line import/no-unresolved
 const dotenv = require('dotenv');
-dotenv.config({ path: "./.env.deploy" });
 
-const { DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, DEPLOY_REPOSITORY, DEPLOY_REF } = process.env;
+dotenv.config({ path: './.env.deploy' });
+
+const {
+  DEPLOY_USER, DEPLOY_HOST, DEPLOY_PATH, DEPLOY_REPOSITORY, DEPLOY_REF,
+} = process.env;
 
 module.exports = {
-  apps : [{
-    name   : "mesto",
-    script : "dist/app.js"
+  apps: [{
+    name: 'mesto',
+    script: 'dist/app.js',
   }],
   deploy: {
     production: {
@@ -19,4 +23,4 @@ module.exports = {
       'post-deploy': 'cd backend && pwd && npm ci && npm run build && pm2 startOrRestart ecosystem.config.js --env production',
     },
   },
-}
+};
