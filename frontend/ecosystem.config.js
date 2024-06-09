@@ -6,7 +6,7 @@ const {
   DEPLOY_HOST,
   DEPLOY_PATH,
   DEPLOY_REF,
-  DEPLOY_REPOSITORY = "origin/master",
+  DEPLOY_REPOSITORY,
 } = process.env;
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
       ref: DEPLOY_REF,
       repo: DEPLOY_REPOSITORY,
       path: DEPLOY_PATH,
-      "post-deploy": "cd frontend && pwd && npm i && npm run build",
+      "post-deploy": "cd frontend && pwd && npm ci && npm run build",
     },
   },
 };
