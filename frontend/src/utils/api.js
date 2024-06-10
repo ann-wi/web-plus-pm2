@@ -130,6 +130,6 @@ class Api {
   }
 }
 // Замените на адрес вашего бэкенда
-const api = new Api("https://web-plus-pm2-deploy.nomorepartiesco.ru");
+const api = new Api("https://api.web-plus-pm2-deploy.nomorepartiesco.ru");
 
 export default api;
