@@ -1,13 +1,9 @@
-import {
-  UNAUTHORIZED_ERROR_STATUS,
-} from '../constants';
-
 class UnauthorizedError extends Error {
-  statusCode: number;
+  public statusCode: number;
 
   constructor(message: string) {
     super(message);
-    this.statusCode = UNAUTHORIZED_ERROR_STATUS;
+    this.statusCode = 401;
   }
 }
 

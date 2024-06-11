@@ -1,28 +1,27 @@
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
 import { JWT_SECRET } from '../config';
 import UnauthorizedError from '../errors/unauthorized-error';
 
-interface IAuthRequest extends Request {
-  user?: string | JwtPayload
+interface JwtPayload {
+  _id: string
 }
 
-export const authMiddleware = async (req: IAuthRequest, res: Response, next: NextFunction) => {
-  const { authorization } = req.body;
-
-  if (!authorization || !authorization.startWith('Bearer ')) {
-    return next((new UnauthorizedError('Incorrect login or password')));
-  }
-
-  const token = authorization.replace('Bearer ', '');
-  let payload;
-
+const auth = (req: Request, res: Response, next: NextFunction) => {
   try {
-    payload = jwt.verify(token, JWT_SECRET);
-  } catch (err) {
-    return next((new UnauthorizedError('Incorrect login or password')));
-  }
+    let token = req.cookies.jwt || req.headers.authorization;
+    if (!token) {
+      throw new UnauthorizedError('Токен не передан');
+    }
+    token = token.replace('Bearer ', '');
+    let payload: JwtPayload | null = null;
 
-  req.user = payload as { _id: JwtPayload };
-  next();
+    payload = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    req.user = payload;
+    next();
+  } catch (e) {
+    next(new UnauthorizedError('Необходима авторизация'));
+  }
 };
+
+export default auth;

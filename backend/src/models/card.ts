@@ -1,27 +1,27 @@
-import mongoose from 'mongoose';
-import { urlRegex } from '../config';
+import mongoose, { ObjectId } from 'mongoose';
+import { urlRegExp } from '../middlewares/validatons';
 
 interface ICard {
   name: string;
   link: string;
-  owner: mongoose.Schema.Types.ObjectId;
-  likes: mongoose.Schema.Types.ObjectId[];
-  createdAt: Date;
+  owner: ObjectId;
+  likes: ObjectId[];
+  createdAt: Date | string;
 }
 
-const cardSchema = new mongoose.Schema<ICard>({
+const cardsSchema = new mongoose.Schema<ICard>({
   name: {
     type: String,
-    minlength: 2,
-    maxlength: 30,
-    required: true,
+    required: [true, 'Поле "name" должно быть заполнено'],
+    minlength: [2, 'Минимальная длина поля "name" - 2'],
+    maxlength: [30, 'Максимальная длина поля "name" - 30'],
   },
   link: {
     type: String,
-    required: true,
+    required: [true, 'Поле "link" должно быть заполнено'],
     validate: {
-      validator: (v: string) => urlRegex.test(v),
-      message: 'Incorrect url',
+      validator: (v: string) => urlRegExp.test(v),
+      message: 'Поле "link" должно быть валидным url-адресом.',
     },
   },
   owner: {
@@ -37,6 +37,6 @@ const cardSchema = new mongoose.Schema<ICard>({
     type: Date,
     default: Date.now,
   },
-});
+}, { versionKey: false });
 
-export default mongoose.model<ICard>('card', cardSchema);
+export default mongoose.model<ICard>('card', cardsSchema);

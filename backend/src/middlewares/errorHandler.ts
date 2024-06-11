@@ -1,13 +1,11 @@
-import { Request, Response } from 'express';
+import { ErrorRequestHandler } from 'express';
 
-const errorHandler = (err: any, req: Request, res: Response) => {
-  const { statusCode = 500, message } = err;
-
-  res.status(statusCode).send({
-    message: statusCode === 500
-      ? 'Internal Server Error'
-      : message,
-  });
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  const { statusCode = 500 } = err;
+  const isErrorInternal = statusCode === 500;
+  const message = isErrorInternal ? 'На сервере произошла ошибка' : err.message;
+  res.status(statusCode).send({ message });
+  next();
 };
 
 export default errorHandler;
