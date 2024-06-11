@@ -33,23 +33,23 @@ function App() {
   const [email, setEmail] = React.useState("");
 
   const history = useHistory();
-  const token = localStorage.getItem("jwt");
 
+  const token = localStorage.getItem("jwt");
   React.useEffect(() => {
     if (token) {
       api
         .checkToken(token)
         .then((res) => {
-          console.log(res);
+          console.log(res)
           api.setToken(token);
           setEmail(res.email);
           setIsLoggedIn(true);
-          return api.getAppInfo();
+          return api.getAppInfo()
         })
         .then(([cardData, userData]) => {
-          setCurrentUser(userData);
-          setCards(cardData);
-          history.push("/");
+            setCurrentUser(userData);
+            setCards(cardData);
+            history.push("/");
         })
         .catch((err) => {
           localStorage.removeItem("jwt");
